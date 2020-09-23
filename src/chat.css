@@ -9,10 +9,12 @@
 .chat_headerInfo {
   margin: 0 1rem;
   flex: 1;
+  max-height: fit-content;
 }
 
 .chatBody {
   height: 79%;
+  max-height: 75vh;
   background-color: darksalmon;
   overflow-y: scroll;
 }
@@ -31,6 +33,8 @@
 
 .massageBox {
   align-items: center;
+  max-height: 1rem;
+  padding-bottom: 0;
 }
 
 .otherMassages,

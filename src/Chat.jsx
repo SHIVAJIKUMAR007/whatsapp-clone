@@ -16,13 +16,13 @@ function Chat() {
   const [massageToSend, setmassageToSend] = useState("");
   const [room, setroom] = useState("");
   const { roomId } = useParams();
-
+  let massageLen = { len: 0 };
   useEffect(() => {
     if (roomId) {
       db.collection("rooms")
         .doc(roomId)
         .onSnapshot((snapshot) => {
-          setroom(snapshot.data().name);
+          setroom(snapshot.data()?.name);
         });
 
       db.collection("rooms")
@@ -52,6 +52,17 @@ function Chat() {
     });
     setmassageToSend("");
   };
+  // to scroll the whole chat every time when a new massage added
+  const scrolleachsec = async () => {
+    let len = massage.length;
+    if (len > massageLen.len) {
+      document.getElementById("chatbody").scrollTop = document.getElementById(
+        "chatbody"
+      ).scrollHeight;
+      massageLen.len = len;
+    }
+  };
+  setInterval(scrolleachsec, 200);
 
   return (
     <div className="chat">
@@ -59,7 +70,7 @@ function Chat() {
       <ChatHeader key="1" name={room} massage={massage} />
       {/* chat header end  */}
 
-      <div className="chatBody">
+      <div className="chatBody" id="chatbody">
         {roomId ? (
           <>
             {massage?.map((massage) => (
@@ -133,7 +144,7 @@ const ChatHeader = ({ name, massage }) => {
             {massage.length
               ? "  Last Seen at" +
                 new Date(
-                  massage[massage.length - 1]?.time.toDate()
+                  massage[massage.length - 1]?.time?.toDate()
                 ).toUTCString()
               : "No massage till now"}
           </p>
